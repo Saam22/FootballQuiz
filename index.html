@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuizMaster Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Animated BG -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="particles" id="particles"></div>
+<div class="confetti-wrap" id="confetti"></div>
+
+<div class="container">
+
+  <!-- WELCOME SCREEN -->
+  <div class="screen active" id="screen-welcome">
+    <div class="card">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <h1>QuizMaster</h1>
+        <p class="tagline">Test your knowledge. Challenge your mind.</p>
+      </div>
+
+      <p class="category-title">Choose Category</p>
+      <div class="categories" id="categories">
+        <button class="cat-btn selected" data-cat="javascript" onclick="selectCategory(this)">
+          <div class="cat-icon">🟨</div>
+          <div class="cat-name">JavaScript</div>
+          <div class="cat-count">10 Questions</div>
+        </button>
+        <button class="cat-btn" data-cat="html" onclick="selectCategory(this)">
+          <div class="cat-icon">🟧</div>
+          <div class="cat-name">HTML & CSS</div>
+          <div class="cat-count">10 Questions</div>
+        </button>
+        <button class="cat-btn" data-cat="science" onclick="selectCategory(this)">
+          <div class="cat-icon">🔬</div>
+          <div class="cat-name">Science</div>
+          <div class="cat-count">10 Questions</div>
+        </button>
+        <button class="cat-btn" data-cat="history" onclick="selectCategory(this)">
+          <div class="cat-icon">🏛️</div>
+          <div class="cat-name">History</div>
+          <div class="cat-count">10 Questions</div>
+        </button>
+      </div>
+
+      <p class="category-title">Difficulty</p>
+      <div class="difficulty-row">
+        <button class="diff-btn selected" data-d="easy" onclick="selectDiff(this)">Easy</button>
+        <button class="diff-btn" data-d="medium" onclick="selectDiff(this)">Medium</button>
+        <button class="diff-btn" data-d="hard" onclick="selectDiff(this)">Hard</button>
+      </div>
+
+      <button class="btn-primary" onclick="startQuiz()">Start Quiz →</button>
+    </div>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div class="screen" id="screen-quiz">
+    <div class="card">
+      <div class="quiz-score">
+        <div class="score-pill c"><div class="val" id="score-correct">0</div><div class="lbl">Correct</div></div>
+        <div class="score-pill w"><div class="val" id="score-wrong">0</div><div class="lbl">Wrong</div></div>
+        <div class="score-pill s"><div class="val" id="score-pts">0</div><div class="lbl">Points</div></div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-info">
+          <span class="q-counter">Question <span id="q-num">1</span> of <span id="q-total">10</span></span>
+          <div class="timer-wrap" id="timer-wrap">⏱ <span id="timer">15</span>s</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+      </div>
+
+      <div class="question-area">
+        <div class="q-category-badge" id="q-badge">🟨 JavaScript</div>
+        <div class="question-text" id="question-text">Loading question...</div>
+      </div>
+
+      <div class="answers-grid" id="answers-grid"></div>
+
+      <div class="feedback-bar" id="feedback-bar"></div>
+      <div class="explanation" id="explanation"></div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="screen" id="screen-result">
+    <div class="card">
+      <div class="result-hero">
+        <div class="result-circle">
+          <div class="result-score-num" id="res-pct">0%</div>
+          <div class="result-score-label">SCORE</div>
+        </div>
+        <div class="result-emoji" id="res-emoji">🎉</div>
+        <div class="result-title" id="res-title">Excellent!</div>
+        <div class="result-subtitle" id="res-subtitle">You're a true master!</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-val" id="res-correct" style="color:var(--correct)">0</div>
+          <div class="stat-lbl">Correct</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="res-wrong" style="color:var(--wrong)">0</div>
+          <div class="stat-lbl">Wrong</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="res-time" style="color:var(--gold)">0s</div>
+          <div class="stat-lbl">Avg Time</div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-primary" onclick="playAgain()">Play Again 🔄</button>
+        <button class="btn-secondary" onclick="goHome()">Home</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
