@@ -1,83 +1,48 @@
-# QuizMaster Pro ⚡
+# ⚽ FootballQuiz
 
-An interactive quiz application with multiple categories, difficulty levels, and real-time scoring.
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
----
+> 🏆 **اختبر معرفتك الكروية** — لعبة أسئلة تفاعلية متخصصة في كرة القدم مع فئات متعددة، مساعدات، تحديات يومية، وشارات الإنجاز!
 
-## 🔗 Live Preview
-
-Open `index.html` in any browser — no installation needed.
-
----
-
-## 📸 Overview
-
-QuizMaster Pro is a browser-based quiz game built entirely with Vanilla JavaScript. It challenges users across four knowledge categories with timed questions, instant feedback, and a detailed results screen.
+🔗 **العرض المباشر:** [https://saam22.github.io/FootballQuiz/](https://saam22.github.io/FootballQuiz/)  
+📁 **المستودع:** [https://github.com/Saam22/FootballQuiz](https://github.com/Saam22/FootballQuiz)
 
 ---
 
-## ✨ Features
+## ✨ الميزات
 
-- 4 categories: JavaScript, HTML & CSS, Science, History
-- 3 difficulty levels: Easy, Medium, Hard
-- Countdown timer per question (adjusts by difficulty)
-- Live score and points tracking
-- Randomized question and answer order every round
-- Instant correct/wrong feedback with explanations
-- Confetti animation on high scores (80%+)
-- Fully animated UI with floating particles
-- Results screen with accuracy, correct count, and average time
+### 🎮 ميزات اللعبة
+- ✅ **أكثر من 50 سؤال** عن كرة القدم مع شرح تفصيلي
+- 📚 **6 فئات**: اللاعبين، الأندية، كأس العالم، الدوري المصري، القوانين، متنوع
+- 🎯 **3 مستويات صعوبة**: سهل (20ث)، متوسط (15ث)، صعب (10ث)
+- 💯 **نقاط ديناميكية**: نقاط أساسية + وقت متبقي + مكافأة التتابع
+- 🆘 **3 مساعدات**: 50/50، تخطي السؤال، كشف التلميح
+- ⏱️ **مؤقت** مع تحذيرات بصرية وصوتية
 
----
+### 🎨 تجربة المستخدم
+- 🌓 **الوضع المظلم/الفاتح** — مريح للعين في كل الأوقات
+- 🔊 **مؤثرات صوتية** — أصوات للإجابات الصحيحة/الخاطئة، التهديف
+- 🎉 **احتفالات بصرية** — ألعاب نارية، تأثيرات هدف، جزيئات متحركة
+- 📱 **متجاوب بالكامل** — يعمل بشكل مثالي على الموبايل والتابلت والكمبيوتر
 
-## 🛠️ Built With
-
-| Technology | Purpose |
-|------------|---------|
-| HTML5 | App structure and markup |
-| CSS3 | Styling, animations, keyframes |
-| JavaScript (ES6+) | All logic, DOM manipulation, state management |
-
-> No frameworks. No libraries. No dependencies.
-
----
-
-## 📁 Project Structure
-
-```
-quiz-app/
-└── index.html      # Full app (HTML + CSS + JS in one file)
-```
+### 🏅 نظام التقدم والمكافآت
+- 🔥 **نظام التتابع** — نقاط إضافية للإجابات المتتالية الصحيحة
+- 🏆 **شارات الإنجاز** — احصل على 5 شارات مختلفة
+- 📊 **لوحة إحصائيات** — تتبع أدائك حسب كل فئة
+- 🗓️ **تحدي يومي** — سؤال جديد كل يوم
+- 🥇 **لوحة المتصدرين** — حفظ أعلى 10 نتائج محلياً
 
 ---
 
-## 🧠 JavaScript Concepts Used
-
-- Arrays & Objects
-- `setInterval` / `clearInterval`
-- DOM Manipulation
-- Event Listeners
-- Conditional Logic
-- Template Literals
-- Spread Operator `[...arr]`
-- Array Destructuring
-- `Math.random()` for shuffling
-- CSS class toggling for animations
-- Screen/state management pattern
-
----
-
-## 🚀 How to Run
+## 🎮 كيفية اللعب
 
 ```bash
-# Just open the file
-open index.html
-```
-
-Or drag `index.html` into any browser window.
-
----
-
-## 📄 License
-
-MIT — free to use, modify, and distribute.
+1. اختر الفئة (اللاعبين، الأندية، كأس العالم، إلخ)
+2. اختر مستوى الصعوبة (سهل ← صعب = نقاط أعلى!)
+3. اضغط "بدء المباراة"
+4. أجب على 10 أسئلة قبل انتهاء المؤقت
+5. استخدم المساعدات إذا واجهت صعوبة
+6. ابنِ تتابعاً للحصول على نقاط إضافية
+7. احصل على الشارات وتصدر لوحة المتصدرين!
