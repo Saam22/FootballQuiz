@@ -109,10 +109,7 @@ function writeSave(s){localStorage.setItem('fiq_save',JSON.stringify(s));}
 //  SOUND (Web Audio API)
 // ══════════════════════════════
 let audioCtx=null;
-function getAudio(){
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  return audioCtx;
-}
+function getAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
 function playTone(freq,dur,type='sine',vol=0.3){
   if(!state.soundOn)return;
   try{
@@ -197,7 +194,15 @@ function goHome(){goTo('screen-welcome');checkDaily();}
 // ══════════════════════════════
 //  WELCOME ACTIONS
 // ══════════════════════════════
-function pickCat(btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.cat=btn.dataset.cat;}
+// عند الضغط على زر فئة:
+function pickCat(btn){
+  // إزالة التحديد من جميع الأزرار
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));
+  // تحديد الزر المضغوط
+  btn.classList.add('selected');
+  // حفظ الفئة المختارة
+  state.cat = btn.dataset.cat; // "players" أو "clubs" إلخ
+}
 function pickDiff(btn){document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.diff=btn.dataset.d;}
 
 // ══════════════════════════════
@@ -272,16 +277,38 @@ function answerDaily(btn,isRight,q){
 //  START QUIZ
 // ══════════════════════════════
 function startQuiz(){
-  const pool=[...data[state.cat]];
-  for(let i=pool.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
-  state.questions=pool.slice(0,10);
-  state.idx=0;state.correct=0;state.wrong=0;state.pts=0;
-  state.streak=0;state.maxStreak=0;state.timeTaken=[];
-  state.lifelines={ff:true,skip:true,reveal:true};
+  // التأكد من وجود الفئة
+  if(!data[state.cat]){
+    alert('❌ فئة غير صحيحة!');
+    return;
+  }
+  
+  const pool = [...data[state.cat]];
+  
+  // خلط الأسئلة
+  for(let i=pool.length-1; i>0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  
+  state.questions = pool.slice(0, 10);
+  
+  // التأكد من وجود أسئلة
+  if(state.questions.length === 0){
+    alert('⚠️ لا توجد أسئلة كافية في هذه الفئة!');
+    return;
+  }
+  
+  state.idx=0; state.correct=0; state.wrong=0; state.pts=0;
+  state.streak=0; state.maxStreak=0; state.timeTaken=[];
+  state.lifelines={ff:true, skip:true, reveal:true};
   state.isDaily=false;
+  
   resetLifelineUI();
   goTo('screen-quiz');
-  setTimeout(renderQ,300);
+  
+  // تأخير بسيط لضمان تحميل العناصر
+  setTimeout(renderQ, 500);
 }
 
 // ══════════════════════════════
@@ -305,37 +332,59 @@ function renderStreakDots(){
 //  RENDER QUESTION
 // ══════════════════════════════
 function renderQ(){
-  const q=state.questions[state.idx];
-  const tot=state.questions.length;
-  document.getElementById('q-num').textContent=state.idx+1;
-  document.getElementById('q-tot').textContent=tot;
-  document.getElementById('prog-fill').style.width=((state.idx+1)/tot*100)+'%';
-  document.getElementById('sc-correct').textContent=state.correct;
-  document.getElementById('sc-wrong').textContent=state.wrong;
-  document.getElementById('sc-pts').textContent=state.pts;
-  document.getElementById('sc-streak').textContent=state.streak+'🔥';
-  document.getElementById('q-badge').textContent=badgeMap[state.cat];
-  document.getElementById('q-text').textContent=q.q;
-  document.getElementById('feedback').className='feedback';
-  document.getElementById('explanation').className='explanation';
+  const q = state.questions[state.idx];
+  
+  // حماية من الأسئلة الفارغة
+  if(!q){
+    console.error('❌ سؤال غير موجود في index:', state.idx);
+    return;
+  }
+  
+  const tot = state.questions.length;
+  document.getElementById('q-num').textContent = state.idx+1;
+  document.getElementById('q-tot').textContent = tot;
+  document.getElementById('prog-fill').style.width = ((state.idx+1)/tot*100)+'%';
+  
+  // تحديث النقاط
+  document.getElementById('sc-correct').textContent = state.correct;
+  document.getElementById('sc-wrong').textContent = state.wrong;
+  document.getElementById('sc-pts').textContent = state.pts;
+  document.getElementById('sc-streak').textContent = state.streak+'🔥';
+  
+  // الفئة والسؤال
+  document.getElementById('q-badge').textContent = badgeMap[state.cat] || state.cat;
+  document.getElementById('q-text').textContent = q.q;
+  
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('explanation').className = 'explanation';
+  
   renderStreakDots();
 
-  const order=[0,1,2,3];
-  for(let i=3;i>0;i--){const j=~~(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
-  const letters=['A','B','C','D'];
-  const grid=document.getElementById('answers');grid.innerHTML='';
-  order.forEach((oi,pos)=>{
-    const btn=document.createElement('button');btn.className='ans-btn';
-    btn.dataset.correct=(oi===q.c);btn.dataset.origIdx=oi;
-    btn.innerHTML=`<span class="ans-letter">${letters[pos]}</span>${q.a[oi]}`;
-    btn.onclick=()=>pick(btn,oi===q.c,q);
+  // خلط الإجابات
+  const order = [0,1,2,3];
+  for(let i=3; i>0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  
+  const letters = ['A','B','C','D'];
+  const grid = document.getElementById('answers');
+  grid.innerHTML = '';
+  
+  order.forEach((oi, pos) => {
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    btn.dataset.correct = (oi === q.c);
+    btn.dataset.origIdx = oi;
+    btn.innerHTML = `<span class="ans-letter">${letters[pos]}</span>${q.a[oi]}`;
+    btn.onclick = () => pick(btn, oi===q.c, q);
     grid.appendChild(btn);
   });
-  state.answered=false;
+  
+  state.answered = false;
   startTimer();
-  state.timeStart=Date.now();
+  state.timeStart = Date.now();
 }
-
 // ══════════════════════════════
 //  TIMER
 // ══════════════════════════════
@@ -548,3 +597,55 @@ function playAgain(){startQuiz();}
 //  INIT
 // ══════════════════════════════
 checkDaily();
+// ══════════════════════════════
+//  SPARKLE ANIMATION
+// ══════════════════════════════
+(function createSparks(){
+  for(let i=0; i<30; i++){
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    spark.style.left = Math.random()*100 + '%';
+    spark.style.top = Math.random()*100 + '%';
+    spark.style.animationDelay = Math.random()*3 + 's';
+    spark.style.animationDuration = (Math.random()*2 + 2) + 's';
+    document.body.appendChild(spark);
+  }
+})();
+// ══════════════════════════════
+//  FLOATING FOOTBALLS ANIMATION
+// ══════════════════════════════
+(function createFloatingBalls(){
+  const balls = ['⚽','🥅','🏆','⭐'];
+  const container = document.body;
+  
+  for(let i=0; i<8; i++){
+    setTimeout(()=>{
+      const ball = document.createElement('div');
+      ball.className = 'floating-ball';
+      ball.textContent = balls[Math.floor(Math.random()*balls.length)];
+      ball.style.left = Math.random()*100 + '%';
+      ball.style.animationDuration = (Math.random()*15 + 20) + 's';
+      ball.style.animationDelay = (Math.random()*10) + 's';
+      ball.style.fontSize = (Math.random()*1.5 + 1.5) + 'rem';
+      container.appendChild(ball);
+      
+      // إزالة وإعادة إنشاء للحفاظ على الأداء
+      setTimeout(()=>{
+        ball.remove();
+        createSingleBall();
+      }, 35000);
+    }, i*2000);
+  }
+  
+  function createSingleBall(){
+    const balls = ['⚽','🥅','🏆','⭐'];
+    const ball = document.createElement('div');
+    ball.className = 'floating-ball';
+    ball.textContent = balls[Math.floor(Math.random()*balls.length)];
+    ball.style.left = Math.random()*100 + '%';
+    ball.style.animationDuration = (Math.random()*15 + 20) + 's';
+    ball.style.fontSize = (Math.random()*1.5 + 1.5) + 'rem';
+    document.body.appendChild(ball);
+    setTimeout(()=>{ ball.remove(); createSingleBall(); }, 35000);
+  }
+})();
