@@ -1,323 +1,550 @@
-
-// ============== DATA ==============
-const quizData = {
-  javascript: [
-    { q:"What does 'typeof null' return in JavaScript?", answers:["object","null","undefined","boolean"], correct:0, exp:"This is a famous JS bug. typeof null returns 'object' since the early days." },
-    { q:"Which method removes the last element from an array?", answers:["shift()","pop()","splice()","delete()"], correct:1, exp:"pop() removes and returns the last element. shift() removes the first." },
-    { q:"What is the output of: console.log(0.1 + 0.2 === 0.3)?", answers:["true","false","undefined","NaN"], correct:1, exp:"Floating point precision issue: 0.1+0.2 = 0.30000000000000004" },
-    { q:"What does '===' mean in JavaScript?", answers:["Assignment","Loose equality","Strict equality","Not equal"], correct:2, exp:"=== checks both value AND type. == only checks value (with coercion)." },
-    { q:"Which keyword declares a block-scoped variable?", answers:["var","global","let","function"], correct:2, exp:"let and const are block-scoped. var is function-scoped." },
-    { q:"What does JSON stand for?", answers:["Java Standard Object Notation","JavaScript Object Notation","Java Script On Net","Just Simple Object Names"], correct:1, exp:"JSON = JavaScript Object Notation, used for data interchange." },
-    { q:"How do you write an arrow function?", answers:["function() =>","=> function()","() => {}","func() {}"], correct:2, exp:"Arrow functions syntax: (params) => expression or (params) => { body }" },
-    { q:"What does 'NaN === NaN' return?", answers:["true","false","Error","null"], correct:1, exp:"NaN is the only value in JS not equal to itself. Use Number.isNaN() to check." },
-    { q:"Which loop is guaranteed to run at least once?", answers:["for","while","do...while","forEach"], correct:2, exp:"do...while checks the condition AFTER executing, so it always runs once." },
-    { q:"What is a closure in JavaScript?", answers:["A loop that closes","A function accessing outer scope","A shut-down process","A CSS technique"], correct:1, exp:"A closure is when a function remembers variables from its outer (enclosing) scope." },
+// ══════════════════════════════
+//  FULL QUESTION DATA
+// ══════════════════════════════
+const data = {
+  players:[
+    {q:"How many Ballon d'Or awards has Lionel Messi won?",a:["7","6","8","5"],c:2,exp:"Messi has won 8 Ballon d'Or awards — more than any other player in history."},
+    {q:"Which player is known as 'CR7'?",a:["Ronaldinho","Cristiano Ronaldo","Carlos Ruiz","Claudio Reyna"],c:1,exp:"CR7 = Cristiano Ronaldo, his initials and famous jersey number."},
+    {q:"Who is the all-time top scorer for Brazil national team?",a:["Pelé","Ronaldo","Neymar","Romário"],c:2,exp:"Neymar surpassed Pelé's 77 goals to become Brazil's all-time top scorer."},
+    {q:"Who scored the 'Hand of God' goal in the 1986 World Cup?",a:["Pelé","Ronaldo","Diego Maradona","Zidane"],c:2,exp:"Maradona scored the controversial Hand of God goal against England in the 1986 quarter-final."},
+    {q:"Which goalkeeper has the most clean sheets in Champions League history?",a:["Schmeichel","Buffon","Iker Casillas","Neuer"],c:2,exp:"Iker Casillas holds the UCL record for most clean sheets."},
+    {q:"Who is known as 'The Egyptian King'?",a:["Salah","Mane","Aubameyang","Ziyech"],c:0,exp:"Mohamed Salah is nicknamed 'The Egyptian King' or 'The Pharaoh'."},
+    {q:"Which player has scored the most hat-tricks in La Liga?",a:["Raúl","Benzema","Cristiano Ronaldo","Lionel Messi"],c:3,exp:"Messi holds the record for most hat-tricks in La Liga history."},
+    {q:"Who was the first African player to win FIFA World Player of the Year?",a:["George Weah","Drogba","Okocha","Kanu"],c:0,exp:"George Weah of Liberia won the award in 1995."},
+    {q:"Which club did Ronaldinho win the Ballon d'Or with?",a:["PSG","AC Milan","Barcelona","Flamengo"],c:2,exp:"Ronaldinho won the 2005 Ballon d'Or while at FC Barcelona."},
+    {q:"Zlatan Ibrahimović played for how many different clubs in his career?",a:["8","9","10","11"],c:2,exp:"Ibrahimović played for 10 clubs: Ajax, Juventus, Inter, Barça, AC Milan, PSG, Man Utd, LA Galaxy, AC Milan again, Bologna."},
+    {q:"Which player has won the most Premier League titles?",a:["Ryan Giggs","Paul Scholes","Gary Neville","John Terry"],c:0,exp:"Ryan Giggs won 13 Premier League titles with Manchester United — a record."},
+    {q:"Who scored the fastest hat-trick in Premier League history?",a:["Sadio Mané","Robbie Fowler","Jermain Defoe","Sergio Agüero"],c:0,exp:"Sadio Mané scored a hat-trick in just 2 minutes 56 seconds for Southampton in 2015."},
   ],
-  html: [
-    { q:"What does HTML stand for?", answers:["Hyper Text Markup Language","High Text Machine Language","Hyper Transfer Markup Logic","Hot Text Making Language"], correct:0, exp:"HTML = HyperText Markup Language, the standard language for web pages." },
-    { q:"Which tag creates a hyperlink?", answers:["<link>","<a>","<href>","<url>"], correct:1, exp:"The <a> (anchor) tag creates hyperlinks using the href attribute." },
-    { q:"Which CSS property changes text color?", answers:["font-color","text-color","color","foreground"], correct:2, exp:"The 'color' property sets the foreground (text) color in CSS." },
-    { q:"What is the CSS box model?", answers:["A 3D cube effect","content, padding, border, margin","A layout algorithm","A flexbox method"], correct:1, exp:"The box model defines: content → padding → border → margin, from inside out." },
-    { q:"Which HTML5 tag defines navigation?", answers:["<menu>","<navigation>","<nav>","<links>"], correct:2, exp:"<nav> is a semantic HTML5 element that defines navigation links." },
-    { q:"What does 'display: flex' do?", answers:["Hides element","Makes element flexible/responsive","Removes margin","Changes font"], correct:1, exp:"Flexbox is a 1D layout model that distributes space along an axis." },
-    { q:"Which attribute adds alternative text to images?", answers:["title","src","alt","desc"], correct:2, exp:"The alt attribute provides text shown when image can't load, and helps accessibility." },
-    { q:"What is CSS specificity?", answers:["Animation speed","Rules for which styles apply","Font loading priority","Server response"], correct:1, exp:"Specificity determines which CSS rule wins when multiple rules target the same element." },
-    { q:"Which HTML element is for the largest heading?", answers:["<h6>","<heading>","<h1>","<title>"], correct:2, exp:"<h1> is the most important heading (h1-h6, largest to smallest)." },
-    { q:"What does 'position: absolute' do?", answers:["Locks to viewport","Positions relative to nearest non-static ancestor","Centers element","Floats left"], correct:1, exp:"Absolute positioning removes element from normal flow and positions it relative to its positioned ancestor." },
+  clubs:[
+    {q:"Which club has won the most UEFA Champions League titles?",a:["Barcelona","AC Milan","Bayern Munich","Real Madrid"],c:3,exp:"Real Madrid have won the Champions League a record 15 times."},
+    {q:"Which English club is known as 'The Red Devils'?",a:["Liverpool","Arsenal","Manchester United","Forest"],c:2,exp:"Manchester United are known as The Red Devils."},
+    {q:"Which club plays at the Camp Nou?",a:["Real Madrid","Atletico","Barcelona","Valencia"],c:2,exp:"FC Barcelona play at the Camp Nou, the largest stadium in Europe."},
+    {q:"Which Italian club is nicknamed 'The Old Lady'?",a:["AC Milan","Inter Milan","Roma","Juventus"],c:3,exp:"Juventus = La Vecchia Signora (The Old Lady)."},
+    {q:"Which club did Pep Guardiola NOT manage?",a:["Barcelona","Bayern Munich","Chelsea","Man City"],c:2,exp:"Guardiola managed Barça, Bayern, and Man City — but not Chelsea."},
+    {q:"How many times has AC Milan won the Champions League?",a:["5","6","7","8"],c:2,exp:"AC Milan have won it 7 times — second only to Real Madrid."},
+    {q:"Which club has won the most Premier League titles?",a:["Liverpool","Chelsea","Arsenal","Manchester United"],c:3,exp:"Manchester United have 20 Premier League titles."},
+    {q:"Ajax is based in which city?",a:["Rotterdam","Brussels","Amsterdam","Antwerp"],c:2,exp:"AFC Ajax is based in Amsterdam, Netherlands."},
+    {q:"Which club signed Cristiano Ronaldo for a world-record fee in 2009?",a:["PSG","Juventus","Real Madrid","Atletico"],c:2,exp:"Real Madrid signed Ronaldo from Man Utd for €94 million in 2009."},
+    {q:"Which club did Lionel Messi join after leaving Barcelona in 2021?",a:["Man City","Chelsea","PSG","Inter Miami"],c:2,exp:"Messi joined Paris Saint-Germain (PSG) in August 2021."},
   ],
-  science: [
-    { q:"What is the speed of light?", answers:["300,000 km/s","150,000 km/s","500,000 km/s","1,000,000 km/s"], correct:0, exp:"Light travels at approximately 299,792 km/s (often rounded to 300,000 km/s) in vacuum." },
-    { q:"What is the chemical symbol for water?", answers:["WA","HO","H2O","W2O"], correct:2, exp:"H2O: two hydrogen atoms bonded to one oxygen atom." },
-    { q:"How many planets are in our solar system?", answers:["7","8","9","10"], correct:1, exp:"8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune (Pluto was reclassified in 2006)." },
-    { q:"What force keeps planets in orbit?", answers:["Magnetism","Nuclear force","Gravity","Friction"], correct:2, exp:"Gravity is the attractive force between masses that keeps planets in their orbits." },
-    { q:"What is the powerhouse of the cell?", answers:["Nucleus","Ribosome","Mitochondria","Cell wall"], correct:2, exp:"Mitochondria produce ATP (energy) through cellular respiration." },
-    { q:"What is DNA?", answers:["A protein","Genetic material","A vitamin","An enzyme"], correct:1, exp:"DNA (Deoxyribonucleic Acid) carries genetic information in living organisms." },
-    { q:"What is Newton's first law called?", answers:["Law of Gravity","Law of Inertia","Law of Action","Law of Energy"], correct:1, exp:"The Law of Inertia: an object stays at rest or in motion unless acted on by a force." },
-    { q:"What percentage of Earth is water?", answers:["50%","61%","71%","80%"], correct:2, exp:"About 71% of Earth's surface is water, but 97% of it is salt water." },
-    { q:"What is photosynthesis?", answers:["Cell division","Plants making food from light","Animal digestion","Water evaporation"], correct:1, exp:"Photosynthesis converts CO2 + water + sunlight → glucose + oxygen." },
-    { q:"What is the atomic number of Carbon?", answers:["6","12","8","4"], correct:0, exp:"Carbon (C) has 6 protons, so its atomic number is 6." },
+  worldcup:[
+    {q:"Which country has won the most FIFA World Cups?",a:["Germany","Argentina","Italy","Brazil"],c:3,exp:"Brazil have won 5 World Cups — 1958, 1962, 1970, 1994, 2002."},
+    {q:"Where was the first FIFA World Cup held in 1930?",a:["Brazil","Argentina","Uruguay","Chile"],c:2,exp:"The first World Cup was held in Uruguay, who also won it."},
+    {q:"Who won the 2022 FIFA World Cup in Qatar?",a:["France","Brazil","Argentina","Morocco"],c:2,exp:"Argentina beat France on penalties in a historic 2022 final."},
+    {q:"Who won the Golden Boot at the 2018 World Cup?",a:["Mbappé","Cristiano Ronaldo","Harry Kane","Lukaku"],c:2,exp:"Harry Kane won it with 6 goals for England."},
+    {q:"Germany beat Brazil __ in the 2014 World Cup semi-final?",a:["5-0","6-1","7-1","4-0"],c:2,exp:"Germany humiliated Brazil 7-1 in the 'Mineirazo'."},
+    {q:"Who scored the winning goal in the 2010 World Cup final?",a:["David Villa","Xavi","Iniesta","Torres"],c:2,exp:"Andrés Iniesta scored in extra time as Spain beat Netherlands 1-0."},
+    {q:"How many times has England won the World Cup?",a:["0","1","2","3"],c:1,exp:"England won once — in 1966 at Wembley, beating West Germany 4-2."},
+    {q:"Which nation hosted the 2014 World Cup?",a:["Argentina","Chile","Uruguay","Brazil"],c:3,exp:"Brazil hosted the 2014 World Cup, which Germany won."},
+    {q:"Who scored the most goals in a single World Cup edition?",a:["Ronaldo","Messi","Just Fontaine","Müller"],c:2,exp:"Just Fontaine scored 13 goals for France at the 1958 World Cup — a record that still stands."},
+    {q:"Which country was the first to win back-to-back World Cups?",a:["Brazil","Italy","Germany","Argentina"],c:1,exp:"Italy won back-to-back World Cups in 1934 and 1938."},
   ],
-  history: [
-    { q:"When did World War II end?", answers:["1943","1944","1945","1946"], correct:2, exp:"WWII ended in 1945: V-E Day (May 8) in Europe, V-J Day (Sep 2) in the Pacific." },
-    { q:"Who was the first US President?", answers:["Abraham Lincoln","John Adams","Thomas Jefferson","George Washington"], correct:3, exp:"George Washington served as the first President from 1789 to 1797." },
-    { q:"Where was the Titanic headed when it sank?", answers:["London","New York","Boston","Paris"], correct:1, exp:"The Titanic was on its maiden voyage from Southampton to New York City in 1912." },
-    { q:"Which ancient wonder still stands today?", answers:["Hanging Gardens","Colossus of Rhodes","Great Pyramid of Giza","Lighthouse of Alexandria"], correct:2, exp:"The Great Pyramid of Giza is the only ancient wonder of the world still largely intact." },
-    { q:"In what year did the Berlin Wall fall?", answers:["1987","1988","1989","1990"], correct:2, exp:"The Berlin Wall fell on November 9, 1989, symbolizing the end of the Cold War." },
-    { q:"Which empire was ruled by Julius Caesar?", answers:["Greek","Persian","Roman","Ottoman"], correct:2, exp:"Julius Caesar was a Roman general and statesman who played a key role in the Roman Republic." },
-    { q:"When did the French Revolution begin?", answers:["1776","1783","1789","1799"], correct:2, exp:"The French Revolution began in 1789 with the storming of the Bastille on July 14." },
-    { q:"Who invented the telephone?", answers:["Thomas Edison","Nikola Tesla","Alexander Graham Bell","Guglielmo Marconi"], correct:2, exp:"Alexander Graham Bell is credited with inventing and patenting the telephone in 1876." },
-    { q:"Which country launched the first satellite?", answers:["USA","Germany","China","USSR"], correct:3, exp:"The USSR launched Sputnik 1 on October 4, 1957, the first artificial Earth satellite." },
-    { q:"When did the first moon landing occur?", answers:["1965","1967","1969","1971"], correct:2, exp:"Apollo 11 landed on the Moon on July 20, 1969. Neil Armstrong was first to walk on it." },
+  egypt:[
+    {q:"Which Egyptian club has won the most league titles?",a:["Zamalek","Pyramids","Al Ahly","Ismaily"],c:2,exp:"Al Ahly is the most decorated club in Egypt with 40+ league titles."},
+    {q:"Al Ahly is nicknamed what?",a:["The Red Devils","The Eagles","Club of the Century","The White Knights"],c:2,exp:"Al Ahly was voted 'Club of the Century' in Africa by CAF in 2000."},
+    {q:"What colours does Zamalek wear?",a:["Red & Black","All Red","White & Gold","Blue & White"],c:2,exp:"Zamalek wear white and gold — they are known as 'The White Knights'."},
+    {q:"How many times has Al Ahly won the CAF Champions League?",a:["8","10","12","13"],c:3,exp:"Al Ahly have won the CAF Champions League a record 13 times."},
+    {q:"Which Egyptian player won the Premier League Golden Boot in 2018?",a:["Trezeguet","Elneny","Mohamed Salah","Amr Zaki"],c:2,exp:"Mohamed Salah won the Premier League Golden Boot with 32 goals in 2017/18."},
+    {q:"Which stadium is Al Ahly's home ground?",a:["Cairo International","Al Ahly Stadium","Borg El Arab","30 June Stadium"],c:0,exp:"Al Ahly play at Cairo International Stadium (also called Nasser Stadium)."},
+    {q:"Which Egyptian club is known as 'The White Knights'?",a:["Al Ahly","Pyramids","Zamalek","Ismaily"],c:2,exp:"Zamalek SC are nicknamed 'The White Knights' (الفارس الأبيض)."},
+    {q:"Who is the Egyptian national team nicknamed?",a:["The Pharaohs","The Eagles","The Lions","The Stars"],c:0,exp:"Egypt's national team is called 'The Pharaohs' (الفراعنة)."},
+    {q:"Mohamed Salah plays for which Premier League club?",a:["Arsenal","Chelsea","Liverpool","Man City"],c:2,exp:"Mohamed Salah has been at Liverpool FC since 2017."},
+    {q:"How many times has Egypt won the Africa Cup of Nations?",a:["5","6","7","8"],c:2,exp:"Egypt have won the Africa Cup of Nations a record 7 times."},
+  ],
+  rules:[
+    {q:"How many players are on each team in a standard football match?",a:["9","10","11","12"],c:2,exp:"Each team has 11 players including the goalkeeper."},
+    {q:"How long is a standard football match?",a:["80 min","100 min","90 min","85 min"],c:2,exp:"90 minutes: two halves of 45 minutes plus added time."},
+    {q:"From what distance is a penalty kick taken?",a:["10 yards","11 metres","12 metres","11 yards"],c:1,exp:"The penalty spot is 11 metres (12 yards) from the goal line."},
+    {q:"What is a 'brace' in football?",a:["A tackle foul","Two goals by one player","A hat-trick","An own goal"],c:1,exp:"A brace = two goals by one player in a single match."},
+    {q:"What colour card results in a player being sent off?",a:["Blue","Yellow","Orange","Red"],c:3,exp:"A red card (or two yellows) = sent off, cannot be replaced."},
+    {q:"How many substitutions are allowed per team in competitive matches?",a:["3","4","5","6"],c:2,exp:"Since 2020, FIFA allows 5 substitutions per match."},
+    {q:"What does VAR stand for?",a:["Video Assist Referee","Virtual Assistant Referee","Video Assistant Referee","Visual Accuracy Review"],c:2,exp:"VAR = Video Assistant Referee, used to review key decisions."},
+    {q:"What is the offside rule based on?",a:["Being in opponent's half","Behind the last defender when ball is played","Facing the wrong way","Passing backwards"],c:1,exp:"Offside: a player is nearer the opponent's goal than both the ball and second-to-last defender when the ball is played."},
+    {q:"How wide is a standard football goal?",a:["6.4m","7.32m","8m","7m"],c:1,exp:"Official goal: 7.32m wide and 2.44m high."},
+    {q:"What is a 'hat-trick' in football?",a:["Three assists","Two goals","Three goals by one player","Four goals"],c:2,exp:"A hat-trick = three goals scored by the same player in one match."},
   ]
 };
 
-// ============== STATE ==============
-let state = {
-  category: 'javascript',
-  difficulty: 'easy',
-  questions: [],
-  currentQ: 0,
-  correct: 0,
-  wrong: 0,
-  points: 0,
-  timer: null,
-  timeLeft: 15,
-  answered: false,
-  timeTaken: [],
-  timeStart: 0
+// Mixed = all combined
+data.mixed = [...data.players,...data.clubs,...data.worldcup,...data.egypt,...data.rules];
+
+// Daily questions pool
+const dailyPool = [
+  {q:"Which player has scored the most goals in Champions League history?",a:["Messi","Van Nistelrooy","Raúl","Cristiano Ronaldo"],c:3,exp:"Cristiano Ronaldo holds the record with 140+ Champions League goals."},
+  {q:"Which country invented the sport of football?",a:["Brazil","Spain","England","Germany"],c:2,exp:"Modern football was codified in England in 1863 with the formation of the Football Association."},
+  {q:"What trophy do Champions League winners receive?",a:["The Golden Cup","Big Ears","The Silver Shield","The Star Trophy"],c:1,exp:"The UCL trophy is nicknamed 'Big Ears' due to its distinctive handles."},
+  {q:"Who won the first ever FIFA World Cup?",a:["Brazil","Argentina","Uruguay","Italy"],c:2,exp:"Uruguay won the first World Cup on home soil in 1930."},
+  {q:"Which club has the most followers on social media globally?",a:["Real Madrid","Barcelona","Manchester United","PSG"],c:0,exp:"Real Madrid consistently lead all football clubs in total social media following."},
+  {q:"The offside rule was introduced in which year?",a:["1863","1872","1925","1938"],c:1,exp:"The offside rule was introduced in 1872, though it was significantly reformed in 1925."},
+  {q:"Which nation has appeared in the most World Cup finals?",a:["Italy","Germany","Brazil","Argentina"],c:1,exp:"Germany have appeared in 8 World Cup finals — more than any other nation."},
+];
+
+// ══════════════════════════════
+//  STATE
+// ══════════════════════════════
+const state = {
+  cat:'players', diff:'easy',
+  questions:[], idx:0,
+  correct:0, wrong:0, pts:0,
+  streak:0, maxStreak:0,
+  answered:false,
+  timer:null, timeLeft:15,
+  timeStart:0, timeTaken:[],
+  lifelines:{ ff:true, skip:true, reveal:true },
+  soundOn:true, theme:'dark',
+  isDaily:false
 };
+const timeMap={easy:20,medium:15,hard:10};
+const ptsMap={easy:10,medium:20,hard:30};
+const badgeMap={players:'⭐ Players',clubs:'🏟️ Clubs',worldcup:'🏆 World Cup',egypt:'🇪🇬 Egyptian League',rules:'📋 Rules',mixed:'🎲 Mixed'};
 
-const timeByDiff = { easy: 20, medium: 15, hard: 10 };
-const pointsByDiff = { easy: 10, medium: 20, hard: 30 };
+// ══════════════════════════════
+//  PERSISTENCE
+// ══════════════════════════════
+function loadSave(){return JSON.parse(localStorage.getItem('fiq_save')||'{"games":0,"totalPts":0,"totalCorrect":0,"totalQ":0,"catStats":{},"leaderboard":[],"dailyDone":"","achievements":[]}');}
+function writeSave(s){localStorage.setItem('fiq_save',JSON.stringify(s));}
 
-// ============== PARTICLES ==============
-function createParticles() {
-  const wrap = document.getElementById('particles');
-  for (let i = 0; i < 25; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (Math.random() * 10 + 8) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
-    p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
-    p.style.opacity = Math.random() * 0.6;
-    wrap.appendChild(p);
+// ══════════════════════════════
+//  SOUND (Web Audio API)
+// ══════════════════════════════
+let audioCtx=null;
+function getAudio(){
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq,dur,type='sine',vol=0.3){
+  if(!state.soundOn)return;
+  try{
+    const ac=getAudio();
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    o.type=type;o.frequency.value=freq;
+    g.gain.setValueAtTime(vol,ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
+    o.start();o.stop(ac.currentTime+dur);
+  }catch(e){}
+}
+function sfxCorrect(){playTone(523,0.1);setTimeout(()=>playTone(659,0.1),80);setTimeout(()=>playTone(784,0.2),160);}
+function sfxWrong(){playTone(200,0.3,'sawtooth',0.2);}
+function sfxTick(){playTone(880,0.05,'square',0.05);}
+function sfxGoal(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.15),i*80));}
+
+// ══════════════════════════════
+//  THEME & SOUND TOGGLES
+// ══════════════════════════════
+function toggleTheme(){
+  state.theme = state.theme==='dark'?'light':'dark';
+  document.body.classList.toggle('light',state.theme==='light');
+  document.getElementById('theme-btn').textContent = state.theme==='dark'?'🌙':'☀️';
+}
+function toggleSound(){
+  state.soundOn=!state.soundOn;
+  document.getElementById('sound-btn').textContent=state.soundOn?'🔊':'🔇';
+}
+
+// ══════════════════════════════
+//  PARTICLES
+// ══════════════════════════════
+(function(){
+  const w=document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');p.className='particle';
+    p.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*12}s;`;
+    w.appendChild(p);
+  }
+})();
+
+// ══════════════════════════════
+//  CONFETTI
+// ══════════════════════════════
+function launchConfetti(){
+  const w=document.getElementById('confetti');w.innerHTML='';
+  const cols=['#16a34a','#22c55e','#f59e0b','#fff','#86efac','#fde68a'];
+  for(let i=0;i<100;i++){
+    const c=document.createElement('div');c.className='cf';
+    c.style.cssText=`left:${Math.random()*100}%;width:${Math.random()*12+5}px;height:${Math.random()*12+5}px;background:${cols[~~(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${Math.random()*2+2}s;animation-delay:${Math.random()*1.5}s;`;
+    w.appendChild(c);setTimeout(()=>c.remove(),4500);
   }
 }
 
-// ============== CONFETTI ==============
-function launchConfetti() {
-  const wrap = document.getElementById('confetti');
-  wrap.innerHTML = '';
-  const colors = ['#7c3aed','#a855f7','#10b981','#f59e0b','#ec4899','#3b82f6'];
-  for (let i = 0; i < 80; i++) {
-    const c = document.createElement('div');
-    c.className = 'confetti-piece';
-    c.style.left = Math.random() * 100 + '%';
-    c.style.background = colors[Math.floor(Math.random() * colors.length)];
-    c.style.width = (Math.random() * 12 + 6) + 'px';
-    c.style.height = (Math.random() * 12 + 6) + 'px';
-    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    c.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    c.style.animationDelay = (Math.random() * 1.5) + 's';
-    wrap.appendChild(c);
-    setTimeout(() => c.remove(), 4000);
+// ══════════════════════════════
+//  GOAL ANIMATION
+// ══════════════════════════════
+function showGoal(){
+  const el=document.getElementById('goal-text');
+  el.textContent=['GOAL! ⚽','GOLAZO! 🔥','MAGNIFICO! ✨'][~~(Math.random()*3)];
+  el.className='goal-text show';
+  sfxGoal();
+  setTimeout(()=>{el.className='goal-text';},1300);
+}
+
+// ══════════════════════════════
+//  SCREEN NAV
+// ══════════════════════════════
+function goTo(id){
+  const cur=document.querySelector('.screen.active');
+  if(cur){cur.classList.add('leaving');setTimeout(()=>cur.classList.remove('active','leaving'),300);}
+  setTimeout(()=>{
+    document.getElementById(id).classList.add('active');
+    if(id==='screen-leaderboard')renderLeaderboard();
+    if(id==='screen-stats')renderStats();
+    if(id==='screen-daily')renderDaily();
+  },200);
+}
+function goHome(){goTo('screen-welcome');checkDaily();}
+
+// ══════════════════════════════
+//  WELCOME ACTIONS
+// ══════════════════════════════
+function pickCat(btn){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.cat=btn.dataset.cat;}
+function pickDiff(btn){document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.diff=btn.dataset.d;}
+
+// ══════════════════════════════
+//  DAILY CHALLENGE
+// ══════════════════════════════
+function checkDaily(){
+  const today=new Date().toDateString();
+  const save=loadSave();
+  const done=save.dailyDone===today;
+  const banner=document.getElementById('daily-banner');
+  const badge=document.getElementById('daily-badge');
+  const sub=document.getElementById('daily-sub');
+  if(done){
+    banner.classList.add('daily-done');
+    badge.textContent='✓ DONE';
+    sub.textContent='Come back tomorrow for a new challenge!';
+  } else {
+    banner.classList.remove('daily-done');
+    badge.textContent='NEW';
+    sub.textContent='New question every day!';
   }
 }
+function renderDaily(){
+  const today=new Date().toDateString();
+  document.getElementById('daily-date-label').textContent=today;
+  // Pick question based on day of year
+  const doy=Math.floor((new Date()-new Date(new Date().getFullYear(),0,0))/(1000*60*60*24));
+  const q=dailyPool[doy % dailyPool.length];
+  document.getElementById('daily-q-text').textContent=q.q;
+  document.getElementById('daily-feedback').className='feedback';
+  document.getElementById('daily-explanation').className='explanation';
 
-// ============== SCREEN NAVIGATION ==============
-function goToScreen(id) {
-  const current = document.querySelector('.screen.active');
-  if (current) {
-    current.classList.add('leaving');
-    setTimeout(() => {
-      current.classList.remove('active', 'leaving');
-    }, 300);
-  }
-  setTimeout(() => {
-    const next = document.getElementById(id);
-    next.classList.add('active');
-  }, 200);
-}
-
-// ============== WELCOME ==============
-function selectCategory(btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  state.category = btn.dataset.cat;
-}
-
-function selectDiff(btn) {
-  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  state.difficulty = btn.dataset.d;
-}
-
-// ============== QUIZ LOGIC ==============
-function startQuiz() {
-  // Shuffle and pick 10
-  const all = [...quizData[state.category]];
-  for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
-  }
-  state.questions = all.slice(0, 10);
-  state.currentQ = 0;
-  state.correct = 0;
-  state.wrong = 0;
-  state.points = 0;
-  state.timeTaken = [];
-
-  goToScreen('screen-quiz');
-  setTimeout(renderQuestion, 300);
-}
-
-function renderQuestion() {
-  const q = state.questions[state.currentQ];
-  const total = state.questions.length;
-
-  document.getElementById('q-num').textContent = state.currentQ + 1;
-  document.getElementById('q-total').textContent = total;
-  document.getElementById('progress-fill').style.width = ((state.currentQ + 1) / total * 100) + '%';
-  document.getElementById('score-correct').textContent = state.correct;
-  document.getElementById('score-wrong').textContent = state.wrong;
-  document.getElementById('score-pts').textContent = state.points;
-
-  const catLabels = { javascript:'🟨 JavaScript', html:'🟧 HTML & CSS', science:'🔬 Science', history:'🏛️ History' };
-  document.getElementById('q-badge').textContent = catLabels[state.category];
-  document.getElementById('question-text').textContent = q.q;
-  document.getElementById('feedback-bar').className = 'feedback-bar';
-  document.getElementById('explanation').className = 'explanation';
-  document.getElementById('explanation').textContent = '';
-
-  // Shuffle answers
-  const letters = ['A','B','C','D'];
-  const indices = [0,1,2,3];
-  for (let i=3;i>0;i--){const j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]];}
-
-  const grid = document.getElementById('answers-grid');
-  grid.innerHTML = '';
-  state.shuffledCorrect = indices.indexOf(q.correct);
-
-  indices.forEach((origIdx, pos) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-btn';
-    btn.innerHTML = `<span class="answer-letter">${letters[pos]}</span> ${q.answers[origIdx]}`;
-    btn.dataset.isCorrect = (origIdx === q.correct);
-    btn.onclick = () => selectAnswer(btn, origIdx === q.correct, q);
+  const save=loadSave();
+  const done=save.dailyDone===today;
+  const grid=document.getElementById('daily-answers');
+  grid.innerHTML='';
+  const letters=['A','B','C','D'];
+  const order=[0,1,2,3];
+  for(let i=3;i>0;i--){const j=~~(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  order.forEach((oi,pos)=>{
+    const btn=document.createElement('button');
+    btn.className='ans-btn';
+    btn.dataset.correct=(oi===q.c);
+    btn.innerHTML=`<span class="ans-letter">${letters[pos]}</span>${q.a[oi]}`;
+    if(done)btn.disabled=true;
+    else btn.onclick=()=>answerDaily(btn,oi===q.c,q);
     grid.appendChild(btn);
   });
-
-  state.answered = false;
-  startTimer();
-  state.timeStart = Date.now();
+  if(done){
+    document.getElementById('daily-feedback').textContent='✓ Already completed today!';
+    document.getElementById('daily-feedback').className='feedback show ok';
+  }
+}
+function answerDaily(btn,isRight,q){
+  document.querySelectorAll('#daily-answers .ans-btn').forEach(b=>b.disabled=true);
+  if(isRight){btn.classList.add('correct');sfxCorrect();}
+  else{btn.classList.add('wrong');sfxWrong();document.querySelectorAll('#daily-answers .ans-btn').forEach(b=>{if(b.dataset.correct==='true')b.classList.add('correct');});}
+  const fb=document.getElementById('daily-feedback');
+  fb.textContent=isRight?'⚽ Correct!':'🟥 Wrong!';
+  fb.className='feedback show '+(isRight?'ok':'no');
+  const exp=document.getElementById('daily-explanation');
+  exp.textContent='💡 '+q.exp;exp.classList.add('show');
+  const today=new Date().toDateString();
+  const save=loadSave();
+  save.dailyDone=today;
+  if(isRight){save.totalCorrect=(save.totalCorrect||0)+1;save.totalPts=(save.totalPts||0)+50;}
+  writeSave(save);checkDaily();
+  if(isRight)setTimeout(launchConfetti,300);
 }
 
-function startTimer() {
-  clearInterval(state.timer);
-  state.timeLeft = timeByDiff[state.difficulty];
-  updateTimerUI();
-  state.timer = setInterval(() => {
-    state.timeLeft--;
-    updateTimerUI();
-    if (state.timeLeft <= 0) {
-      clearInterval(state.timer);
-      timeOut();
-    }
-  }, 1000);
+// ══════════════════════════════
+//  START QUIZ
+// ══════════════════════════════
+function startQuiz(){
+  const pool=[...data[state.cat]];
+  for(let i=pool.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  state.questions=pool.slice(0,10);
+  state.idx=0;state.correct=0;state.wrong=0;state.pts=0;
+  state.streak=0;state.maxStreak=0;state.timeTaken=[];
+  state.lifelines={ff:true,skip:true,reveal:true};
+  state.isDaily=false;
+  resetLifelineUI();
+  goTo('screen-quiz');
+  setTimeout(renderQ,300);
 }
 
-function updateTimerUI() {
-  document.getElementById('timer').textContent = state.timeLeft;
-  const wrap = document.getElementById('timer-wrap');
-  wrap.className = state.timeLeft <= 5 ? 'timer-wrap danger' : 'timer-wrap';
+// ══════════════════════════════
+//  STREAK DOTS
+// ══════════════════════════════
+function renderStreakDots(){
+  const wrap=document.getElementById('streak-dots');
+  wrap.innerHTML='';
+  const target=3;
+  for(let i=0;i<target;i++){
+    const d=document.createElement('div');
+    d.className='streak-dot'+(i<state.streak%target||state.streak>=target&&state.streak%target===0&&state.streak>0?' hit':'');
+    d.textContent=i<(state.streak%target||state.streak>=target?target:0)?'⚽':'';
+    wrap.appendChild(d);
+  }
+  const bonus=document.getElementById('streak-bonus');
+  bonus.textContent=state.streak>=3?'+BONUS x'+Math.floor(state.streak/3):'';
 }
 
-function timeOut() {
-  if (state.answered) return;
-  state.answered = true;
-  state.wrong++;
-  state.timeTaken.push(timeByDiff[state.difficulty]);
+// ══════════════════════════════
+//  RENDER QUESTION
+// ══════════════════════════════
+function renderQ(){
+  const q=state.questions[state.idx];
+  const tot=state.questions.length;
+  document.getElementById('q-num').textContent=state.idx+1;
+  document.getElementById('q-tot').textContent=tot;
+  document.getElementById('prog-fill').style.width=((state.idx+1)/tot*100)+'%';
+  document.getElementById('sc-correct').textContent=state.correct;
+  document.getElementById('sc-wrong').textContent=state.wrong;
+  document.getElementById('sc-pts').textContent=state.pts;
+  document.getElementById('sc-streak').textContent=state.streak+'🔥';
+  document.getElementById('q-badge').textContent=badgeMap[state.cat];
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('feedback').className='feedback';
+  document.getElementById('explanation').className='explanation';
+  renderStreakDots();
 
-  // Highlight correct
-  document.querySelectorAll('.answer-btn').forEach(btn => {
-    btn.disabled = true;
-    if (btn.dataset.isCorrect === 'true') btn.classList.add('correct');
+  const order=[0,1,2,3];
+  for(let i=3;i>0;i--){const j=~~(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+  const letters=['A','B','C','D'];
+  const grid=document.getElementById('answers');grid.innerHTML='';
+  order.forEach((oi,pos)=>{
+    const btn=document.createElement('button');btn.className='ans-btn';
+    btn.dataset.correct=(oi===q.c);btn.dataset.origIdx=oi;
+    btn.innerHTML=`<span class="ans-letter">${letters[pos]}</span>${q.a[oi]}`;
+    btn.onclick=()=>pick(btn,oi===q.c,q);
+    grid.appendChild(btn);
   });
-
-  showFeedback(false, "⏱ Time's up!");
-  setTimeout(nextQuestion, 2200);
+  state.answered=false;
+  startTimer();
+  state.timeStart=Date.now();
 }
 
-function selectAnswer(btn, isCorrect, q) {
-  if (state.answered) return;
-  state.answered = true;
+// ══════════════════════════════
+//  TIMER
+// ══════════════════════════════
+function startTimer(){
   clearInterval(state.timer);
+  state.timeLeft=timeMap[state.diff];renderTimer();
+  state.timer=setInterval(()=>{
+    state.timeLeft--;renderTimer();
+    if(state.timeLeft>0&&state.timeLeft<=5)sfxTick();
+    if(state.timeLeft<=0){clearInterval(state.timer);timeout();}
+  },1000);
+}
+function renderTimer(){
+  document.getElementById('timer').textContent=state.timeLeft;
+  document.getElementById('timer-wrap').className=state.timeLeft<=5?'timer-display danger':'timer-display';
+}
+function timeout(){
+  if(state.answered)return;
+  state.answered=true;state.wrong++;state.streak=0;
+  state.timeTaken.push(timeMap[state.diff]);
+  document.querySelectorAll('.ans-btn').forEach(b=>{b.disabled=true;if(b.dataset.correct==='true')b.classList.add('correct');});
+  showFeedback(false,"⏱ Time's up!");sfxWrong();
+  setTimeout(next,2300);
+}
 
-  const taken = Math.round((Date.now() - state.timeStart) / 1000);
+// ══════════════════════════════
+//  LIFELINES
+// ══════════════════════════════
+function resetLifelineUI(){
+  ['ll-5050','ll-skip','ll-reveal'].forEach(id=>{document.getElementById(id).disabled=false;});
+}
+function use5050(){
+  if(!state.lifelines.ff||state.answered)return;
+  state.lifelines.ff=false;
+  document.getElementById('ll-5050').disabled=true;
+  const q=state.questions[state.idx];
+  let hidden=0;
+  document.querySelectorAll('.ans-btn').forEach(btn=>{
+    if(btn.dataset.correct==='false'&&hidden<2){btn.classList.add('hidden-50');btn.disabled=true;hidden++;}
+  });
+  playTone(440,0.2);
+}
+function useSkip(){
+  if(!state.lifelines.skip||state.answered)return;
+  state.lifelines.skip=false;
+  document.getElementById('ll-skip').disabled=true;
+  clearInterval(state.timer);
+  playTone(660,0.15);
+  state.answered=true;
+  state.timeTaken.push(0);
+  setTimeout(next,300);
+}
+function useReveal(){
+  if(!state.lifelines.reveal||state.answered)return;
+  state.lifelines.reveal=false;
+  document.getElementById('ll-reveal').disabled=true;
+  const q=state.questions[state.idx];
+  const exp=document.getElementById('explanation');
+  exp.textContent='💡 '+q.exp;exp.classList.add('show');
+  playTone(550,0.2);
+}
+
+// ══════════════════════════════
+//  PICK ANSWER
+// ══════════════════════════════
+function pick(btn,isRight,q){
+  if(state.answered)return;
+  state.answered=true;clearInterval(state.timer);
+  const taken=Math.round((Date.now()-state.timeStart)/1000);
   state.timeTaken.push(taken);
-
-  document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
-
-  if (isCorrect) {
+  document.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
+  if(isRight){
     btn.classList.add('correct');
-    state.correct++;
-    const bonus = Math.max(1, state.timeLeft);
-    const pts = pointsByDiff[state.difficulty] + bonus;
-    state.points += pts;
-    showFeedback(true, `✓ Correct! +${pts} points`);
+    state.correct++;state.streak++;
+    if(state.streak>state.maxStreak)state.maxStreak=state.streak;
+    const bonus=Math.max(1,state.timeLeft);
+    const streakBonus=state.streak>=3?Math.floor(state.streak/3)*5:0;
+    const earned=ptsMap[state.diff]+bonus+streakBonus;
+    state.pts+=earned;
+    showFeedback(true,`⚽ Correct! +${earned} pts${streakBonus?` (🔥+${streakBonus} streak)`:''}`);;
+    sfxCorrect();
+    setTimeout(showGoal,100);
   } else {
-    btn.classList.add('wrong');
-    state.wrong++;
-    // show correct
-    document.querySelectorAll('.answer-btn').forEach(b => {
-      if (b.dataset.isCorrect === 'true') b.classList.add('correct');
+    btn.classList.add('wrong');state.wrong++;state.streak=0;
+    document.querySelectorAll('.ans-btn').forEach(b=>{if(b.dataset.correct==='true')b.classList.add('correct');});
+    showFeedback(false,'🟥 Wrong answer!');sfxWrong();
+  }
+  const exp=document.getElementById('explanation');
+  exp.textContent='💡 '+q.exp;exp.classList.add('show');
+  document.getElementById('sc-correct').textContent=state.correct;
+  document.getElementById('sc-wrong').textContent=state.wrong;
+  document.getElementById('sc-pts').textContent=state.pts;
+  document.getElementById('sc-streak').textContent=state.streak+'🔥';
+  renderStreakDots();
+  setTimeout(next,2600);
+}
+function showFeedback(ok,msg){const el=document.getElementById('feedback');el.textContent=msg;el.className='feedback show '+(ok?'ok':'no');}
+function next(){state.idx++;state.idx>=state.questions.length?showResult():renderQ();}
+
+// ══════════════════════════════
+//  RESULT + BADGES + SAVE
+// ══════════════════════════════
+function showResult(){
+  const tot=state.questions.length;
+  const pct=Math.round(state.correct/tot*100);
+  const avgT=state.timeTaken.length?Math.round(state.timeTaken.reduce((a,b)=>a+b,0)/state.timeTaken.length):0;
+  document.getElementById('res-pct').textContent=pct+'%';
+  document.getElementById('res-correct').textContent=state.correct;
+  document.getElementById('res-wrong').textContent=state.wrong;
+  document.getElementById('res-pts').textContent=state.pts;
+
+  const grades=[[100,'🏆','WORLD CHAMPION!','Flawless! You know football inside out!'],[80,'🥇','TOP SCORER!','Incredible knowledge of the beautiful game!'],[60,'🥈','FIRST TEAM!','Solid performance, you know your football!'],[40,'🥉','SUB BENCH','Good effort! Keep watching more matches!'],[0,'📺','WARMING UP','Study more football and come back stronger!']];
+  const [,emoji,title,sub]=grades.find(([min])=>pct>=min);
+  document.getElementById('res-emoji').textContent=emoji;
+  document.getElementById('res-title').textContent=title;
+  document.getElementById('res-sub').textContent=sub;
+
+  // Earn badges
+  const newBadges=[];
+  if(pct===100)newBadges.push({icon:'🏆',label:'Perfect Score',cls:'gold'});
+  if(state.maxStreak>=5)newBadges.push({icon:'🔥',label:'On Fire (5 streak)',cls:'purple'});
+  if(state.maxStreak>=3)newBadges.push({icon:'⚡',label:'Hat-Trick Streak',cls:'green'});
+  if(state.pts>=200)newBadges.push({icon:'💎',label:'Point Machine',cls:'blue'});
+  if(state.correct===tot)newBadges.push({icon:'⭐',label:'All Correct',cls:'gold'});
+
+  const save=loadSave();
+  newBadges.forEach(b=>{if(!save.achievements.includes(b.label))save.achievements.push(b.label);});
+
+  const badgesSection=document.getElementById('badges-section');
+  const badgesRow=document.getElementById('badges-row');
+  if(newBadges.length>0){
+    badgesSection.style.display='block';
+    badgesRow.innerHTML='';
+    newBadges.forEach((b,i)=>{
+      const el=document.createElement('div');
+      el.className=`badge ${b.cls}`;el.style.animationDelay=(i*0.15)+'s';
+      el.innerHTML=`${b.icon} ${b.label}`;badgesRow.appendChild(el);
     });
-    showFeedback(false, '✗ Wrong answer!');
+  } else badgesSection.style.display='none';
+
+  // Save to leaderboard & global stats
+  save.games=(save.games||0)+1;
+  save.totalPts=(save.totalPts||0)+state.pts;
+  save.totalCorrect=(save.totalCorrect||0)+state.correct;
+  save.totalQ=(save.totalQ||0)+tot;
+  if(!save.catStats)save.catStats={};
+  if(!save.catStats[state.cat])save.catStats[state.cat]={correct:0,total:0};
+  save.catStats[state.cat].correct+=state.correct;
+  save.catStats[state.cat].total+=tot;
+  if(!save.leaderboard)save.leaderboard=[];
+  save.leaderboard.push({pts:state.pts,pct,cat:state.cat,diff:state.diff,date:new Date().toLocaleDateString()});
+  save.leaderboard.sort((a,b)=>b.pts-a.pts);
+  save.leaderboard=save.leaderboard.slice(0,10);
+  writeSave(save);
+
+  goTo('screen-result');
+  if(pct>=80)setTimeout(launchConfetti,400);
+}
+
+// ══════════════════════════════
+//  LEADERBOARD
+// ══════════════════════════════
+function renderLeaderboard(){
+  const save=loadSave();
+  const list=document.getElementById('lb-list');
+  if(!save.leaderboard||save.leaderboard.length===0){
+    list.innerHTML='<div class="lb-empty">🏟️<br><br>No games played yet.<br>Play your first game!<br></div>';return;
   }
-
-  // Explanation
-  const exp = document.getElementById('explanation');
-  exp.textContent = '💡 ' + q.exp;
-  exp.className = 'explanation show';
-
-  document.getElementById('score-correct').textContent = state.correct;
-  document.getElementById('score-wrong').textContent = state.wrong;
-  document.getElementById('score-pts').textContent = state.points;
-
-  setTimeout(nextQuestion, 2500);
+  list.innerHTML='';
+  save.leaderboard.forEach((e,i)=>{
+    const div=document.createElement('div');div.className='lb-item';div.style.animationDelay=(i*0.05)+'s';
+    const rankClass=i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    div.innerHTML=`<div class="lb-rank ${rankClass}">${medal||'#'+(i+1)}</div><div class="lb-info"><div class="lb-name">${badgeMap[e.cat]||e.cat}</div><div class="lb-meta">${e.diff} • ${e.pct}% • ${e.date}</div></div><div class="lb-pts">${e.pts}pts</div>`;
+    list.appendChild(div);
+  });
 }
 
-function showFeedback(correct, msg) {
-  const bar = document.getElementById('feedback-bar');
-  bar.textContent = msg;
-  bar.className = 'feedback-bar show ' + (correct ? 'correct-fb' : 'wrong-fb');
+// ══════════════════════════════
+//  STATS DASHBOARD
+// ══════════════════════════════
+function renderStats(){
+  const save=loadSave();
+  const acc=save.totalQ>0?Math.round(save.totalCorrect/save.totalQ*100):0;
+  const grid=document.getElementById('dash-grid');
+  grid.innerHTML=`
+    <div class="dash-card"><div class="d-label">Games Played</div><div class="d-val">${save.games||0}</div></div>
+    <div class="dash-card"><div class="d-label">Total Points</div><div class="d-val" style="color:var(--gold)">${save.totalPts||0}</div></div>
+    <div class="dash-card"><div class="d-label">Accuracy</div><div class="d-val" style="color:var(--correct)">${acc}%</div></div>
+    <div class="dash-card"><div class="d-label">Badges Earned</div><div class="d-val" style="color:#a78bfa">${(save.achievements||[]).length}</div></div>
+  `;
+  const bars=document.getElementById('cat-bars');bars.innerHTML='';
+  const cats=[['players','⭐ Players'],['clubs','🏟️ Clubs'],['worldcup','🏆 World Cup'],['egypt','🇪🇬 Egypt'],['rules','📋 Rules']];
+  cats.forEach(([key,label])=>{
+    const s=save.catStats&&save.catStats[key];
+    const pct=s&&s.total>0?Math.round(s.correct/s.total*100):0;
+    const row=document.createElement('div');row.className='cat-bar-row';
+    row.innerHTML=`<div class="cat-bar-name">${label}</div><div class="cat-bar-track"><div class="cat-bar-fill" style="width:0%" data-w="${pct}"></div></div><div class="cat-bar-pct">${pct}%</div>`;
+    bars.appendChild(row);
+  });
+  setTimeout(()=>{document.querySelectorAll('.cat-bar-fill').forEach(el=>el.style.width=el.dataset.w+'%');},100);
 }
 
-function nextQuestion() {
-  state.currentQ++;
-  if (state.currentQ >= state.questions.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
-}
+// ══════════════════════════════
+//  PLAY AGAIN / HOME
+// ══════════════════════════════
+function playAgain(){startQuiz();}
 
-// ============== RESULTS ==============
-function showResults() {
-  const total = state.questions.length;
-  const pct = Math.round(state.correct / total * 100);
-  const avgTime = state.timeTaken.length
-    ? Math.round(state.timeTaken.reduce((a,b) => a+b, 0) / state.timeTaken.length)
-    : 0;
-
-  document.getElementById('res-pct').textContent = pct + '%';
-  document.getElementById('res-correct').textContent = state.correct;
-  document.getElementById('res-wrong').textContent = state.wrong;
-  document.getElementById('res-time').textContent = avgTime + 's';
-
-  let emoji, title, sub;
-  if (pct === 100) { emoji='🏆'; title='PERFECT!'; sub='Flawless victory! You got them all!'; }
-  else if (pct >= 80) { emoji='🎉'; title='Excellent!'; sub='You have impressive knowledge!'; }
-  else if (pct >= 60) { emoji='👍'; title='Good Job!'; sub='Solid performance, keep learning!'; }
-  else if (pct >= 40) { emoji='📚'; title='Keep Going!'; sub='Practice makes perfect!'; }
-  else { emoji='💪'; title='Try Again!'; sub='Review the material and come back stronger!'; }
-
-  document.getElementById('res-emoji').textContent = emoji;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-subtitle').textContent = sub;
-
-  goToScreen('screen-result');
-  if (pct >= 80) setTimeout(launchConfetti, 400);
-}
-
-function playAgain() {
-  startQuiz();
-}
-
-function goHome() {
-  goToScreen('screen-welcome');
-}
-
-// ============== INIT ==============
-createParticles();
+// ══════════════════════════════
+//  INIT
+// ══════════════════════════════
+checkDaily();
