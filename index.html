@@ -19,11 +19,44 @@
   --muted:#6b7280; --border:#bbf7d0; --gold:#d97706; --white:#14532d;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;transition:background 0.4s,color 0.4s;}
+/* خلفية الجسم */
+body{
+  background: 
+    radial-gradient(ellipse at top, rgba(22,163,74,0.1) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, #0a0f0a 100%);
+  color:var(--text);
+  font-family:'Outfit',sans-serif;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  transition:background 0.4s,color 0.4s;
+}
 
+/* الشرارات المتلألئة */
+.spark{
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--accent2);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent2), 0 0 20px var(--accent);
+  pointer-events: none;
+  z-index: 0;
+  animation: sparkTwinkle 3s ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes sparkTwinkle{
+  0%,100%{ opacity: 0; transform: scale(0.5); }
+  50%{ opacity: 0.8; transform: scale(1); }
+}
+
+.pitch-bg::before, .orb, .particles { display: none; }
 /* ── BG ── */
 .pitch-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-.pitch-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(22,163,74,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(22,163,74,0.04) 1px,transparent 1px);background-size:50px 50px;}
+/* .pitch-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(22,163,74,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(22,163,74,0.04) 1px,transparent 1px);background-size:50px 50px;} */
 .pitch-circle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;border:1px solid rgba(22,163,74,0.06);}
 .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;animation:floatOrb 8s ease-in-out infinite;}
 .orb-1{width:400px;height:400px;background:#16a34a;opacity:0.08;top:-100px;left:-100px;}
@@ -1058,6 +1091,20 @@ function playAgain(){startQuiz();}
 //  INIT
 // ══════════════════════════════
 checkDaily();
+// ══════════════════════════════
+//  SPARKLE ANIMATION
+// ══════════════════════════════
+(function createSparks(){
+  for(let i=0; i<30; i++){
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    spark.style.left = Math.random()*100 + '%';
+    spark.style.top = Math.random()*100 + '%';
+    spark.style.animationDelay = Math.random()*3 + 's';
+    spark.style.animationDuration = (Math.random()*2 + 2) + 's';
+    document.body.appendChild(spark);
+  }
+})();
 </script>
 </body>
 </html>
